@@ -1,11 +1,9 @@
 {
-  "name": "multi-dim",
-  "version": "0.0.0",
+  "name": "hypercube-js",
+  "main": "./src/js/main"
+  "version": "0.1.0",
   "authors": [
     "Richard Mehlinger <rmehlinger@gmail.com>"
-  ],
-  "moduleType": [
-    "node"
   ],
   "license": "MIT",
   "ignore": [
