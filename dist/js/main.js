@@ -8,14 +8,25 @@
   bind = rx.bind;
 
   window.multiDim = multiDim = function(arg) {
-    var accum, cellFn, cellOptsFn, colArgs, colWidths, cols, numCols, numRows, rowArgs, rowHeights, rows, tableOpts;
-    rowArgs = arg.rowArgs, colArgs = arg.colArgs, cellFn = arg.cellFn, cellOptsFn = arg.cellOptsFn, tableOpts = arg.tableOpts;
+    var accum, cellData, cellFn, cellOptsFn, colArgs, colWidths, cols, fmtfn, indexedCellData, numCols, numRows, rowArgs, rowHeights, rows, tableOpts;
+    rowArgs = arg.rowArgs, colArgs = arg.colArgs, cellFn = arg.cellFn, cellOptsFn = arg.cellOptsFn, tableOpts = arg.tableOpts, cellData = arg.cellData, fmtfn = arg.fmtfn;
     if (tableOpts == null) {
       tableOpts = {};
     }
     if (cellOptsFn == null) {
       cellOptsFn = function() {
         return {};
+      };
+    }
+    if (cellData == null) {
+      cellData = null;
+    }
+    if (fmtfn == null) {
+      fmtfn = _.identity;
+    }
+    if (cellFn == null) {
+      cellFn = function() {
+        return "";
       };
     }
     numCols = _.reduce(colArgs, function(memo, arg1) {
@@ -43,17 +54,35 @@
     rows = cartesianProduct.apply(null, rowArgs.map(function(arg1) {
       var name, values;
       name = arg1.name, values = arg1.values;
-      return values.map(function(val) {
-        return [name, val];
+      return values.map(function(value) {
+        return {
+          name: name,
+          value: value
+        };
       });
     }));
     cols = cartesianProduct.apply(null, colArgs.map(function(arg1) {
       var name, values;
       name = arg1.name, values = arg1.values;
-      return values.map(function(val) {
-        return [name, val];
+      return values.map(function(value) {
+        return {
+          name: name,
+          value: value
+        };
       });
     }));
+    if (cellData) {
+      indexedCellData = _.object(cellData.map(function(arg1) {
+        var input, output;
+        input = arg1.input, output = arg1.output;
+        console.log(_.pluck(_.sortBy(input, 'name'), 'value'));
+        return [JSON.stringify(_.pluck(_.sortBy(input, 'name'), 'value')), output];
+      }));
+    } else {
+      indexedCellData = {};
+    }
+    console.log(cellData);
+    console.log(indexedCellData);
     return R.table(tableOpts, _.flatten([
       R.thead({}, _.flatten([
         R.tr(R.th({
@@ -79,26 +108,33 @@
       ])), R.tbody({}, rows.map(function(row, rowNum) {
         return R.tr({}, _.flatten([
           row.map(function(arg1, rowIndex) {
-            var name, val;
-            name = arg1[0], val = arg1[1];
+            var name, value;
+            name = arg1.name, value = arg1.value;
             if (rowNum % rowHeights[rowIndex] === 0) {
               return R.th({
                 rowspan: rowHeights[rowIndex]
-              }, val);
+              }, value);
             } else {
               return null;
             }
           }), cols.map(function(col) {
-            var argVals;
-            argVals = _.object(row.concat(col));
-            return R.td(_.extend({}, cellOptsFn(argVals)), cellFn(argVals));
+            var argDict, argString, argVals, cellVal;
+            argVals = _.sortBy(row.concat(col), 'name');
+            argString = JSON.stringify(_.pluck(argVals, 'value'));
+            argDict = _.object(argVals.map(function(arg1) {
+              var name, value;
+              name = arg1.name, value = arg1.value;
+              return [name, value];
+            }));
+            cellVal = argString in indexedCellData ? indexedCellData[argString] : cellFn(argDict);
+            return R.td(_.extend({}, cellOptsFn(cellVal, argDict)), fmtfn(cellVal, argDict));
           })
         ]));
       }))
     ]));
   };
 
-  cartesianProduct = _.memoize(function() {
+  cartesianProduct = function() {
     var lists, prod, r;
     lists = 1 <= arguments.length ? slice.call(arguments, 0) : [];
     if (lists.length > 1) {
@@ -115,7 +151,7 @@
         return [item];
       });
     }
-  });
+  };
 
 }).call(this);
 

@@ -1,9 +1,12 @@
 R = rx.rxt.tags
 {bind} = rx
 
-window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts}) ->
+window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, cellData, fmtfn}) ->
   tableOpts ?= {}
   cellOptsFn ?= -> {}
+  cellData ?= null
+  fmtfn ?= _.identity
+  cellFn ?= -> ""
 
   numCols = _.reduce(
     colArgs
@@ -22,10 +25,22 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts})
   accum = numRows
   rowHeights = rowArgs.map ({values}) -> accum /= values.length
 
-  rows = cartesianProduct rowArgs.map(({name, values}) -> values.map (val) -> [name, val])...
-  cols = cartesianProduct colArgs.map(({name, values}) -> values.map (val) -> [name, val])...
+  rows = cartesianProduct rowArgs.map(({name, values}) -> values.map (value) -> {name, value})...
+  cols = cartesianProduct colArgs.map(({name, values}) -> values.map (value) -> {name, value})...
 
-  R.table tableOpts, _.flatten [
+  if cellData
+    indexedCellData = _.object cellData.map ({input, output}) ->
+      console.log _.pluck _.sortBy(input, 'name'), 'value'
+      [
+        JSON.stringify(_.pluck _.sortBy(input, 'name'), 'value'), output
+      ]
+  else
+    indexedCellData = {}
+
+  console.log cellData
+  console.log indexedCellData
+
+  return R.table tableOpts, _.flatten [
     R.thead {}, _.flatten [
       R.tr R.th {rowspan: colArgs.length * 2 + 1, colspan: rowArgs.length}
       colArgs.map ({name, values}, ci) -> [
@@ -36,17 +51,21 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts})
       ]
     ]
     R.tbody {}, rows.map (row, rowNum) -> R.tr {}, _.flatten [
-      row.map ([name, val], rowIndex) ->
+      row.map ({name, value}, rowIndex) ->
         if rowNum % rowHeights[rowIndex] == 0
-          R.th {rowspan: rowHeights[rowIndex]}, val
+          R.th {rowspan: rowHeights[rowIndex]}, value
         else null
       cols.map (col) ->
-        argVals = _.object row.concat col
-        R.td _.extend({}, cellOptsFn(argVals)), cellFn argVals
+        argVals = _.sortBy row.concat(col), 'name'
+        argString = JSON.stringify _.pluck argVals, 'value'
+        argDict = _.object argVals.map ({name, value}) -> [name, value]
+        cellVal = if argString of indexedCellData then indexedCellData[argString] else cellFn argDict
+
+        R.td _.extend({}, cellOptsFn(cellVal, argDict)), fmtfn cellVal, argDict
     ]
   ]
 
-cartesianProduct = _.memoize (lists...) ->
+cartesianProduct = (lists...) ->
   if lists.length > 1
     r = []
     prod = cartesianProduct(lists[1...]...)
