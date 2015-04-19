@@ -54,7 +54,7 @@ cell.
 
 It returns an HTML table element that can be freely embedded in the DOM. 
 
-# Reactive Coffee
+## Reactive Coffee
 
 Hypercube JS is built using [Reactive Coffee](https://yang.github.io/reactive-coffee/), a lightweight reactive 
 programming package for Coffeescript.
