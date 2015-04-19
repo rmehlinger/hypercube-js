@@ -46,6 +46,53 @@
             "class": m2 === 5 ? 'info' : sign === -1 ? 'danger' : 'success'
           };
         }
+      }))), R.div({
+        "class": 'row'
+      }, R.div({
+        "class": 'col-md-12'
+      }, multiDim({
+        rowArgs: [
+          {
+            name: 'color1',
+            values: ['G', 'g']
+          }, {
+            name: 'shape1',
+            values: ['R', 'r']
+          }
+        ],
+        colArgs: [
+          {
+            name: 'color2',
+            values: ['G', 'g']
+          }, {
+            name: 'shape2',
+            values: ['R', 'r']
+          }
+        ],
+        cellFn: function(arg) {
+          var shape1, shape2;
+          shape1 = arg.shape1, shape2 = arg.shape2;
+          if ((shape1 === shape2 && shape2 === 'r')) {
+            return 'Wrinkled';
+          } else {
+            return 'Round';
+          }
+        },
+        cellOptsFn: function(arg) {
+          var color1, color2;
+          color1 = arg.color1, color2 = arg.color2;
+          return {
+            style: {
+              padding: 5,
+              backgroundColor: (color1 === color2 && color2 === 'g') ? '#F5F6CE' : '#CEF6CE'
+            }
+          };
+        },
+        tableOpts: {
+          style: {
+            border: '1px solid #333'
+          }
+        }
       })))
     ]));
   });
