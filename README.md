@@ -37,6 +37,13 @@ two genes, e.g., whether a pea is green or yellow, and whether it is round or wr
 
 Unfortunately, even two dimensional tables are difficult enough to work with in HTML, embedded as they are in a one dimensional tree structure. Attempting to layout higher dimensional tables is a tedious and difficult task. Hypercube-js simplifies that task, and does the hard work for you.
 
+# Installation
+Hypercube-js is currently available through Bower:
+
+```bower install hypercube-js```
+
+Hypercube-js is dependent on JQuery, Underscore, and Reactive coffee.
+
 # Usage
 
 To build a table, call the `multiDim` function. This function takes as its sole argument an object containing the 
