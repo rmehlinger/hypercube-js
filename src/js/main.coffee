@@ -1,10 +1,9 @@
 R = rx.rxt.tags
 {bind} = rx
 
-window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, rowOptsFn}) ->
+window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts}) ->
   tableOpts ?= {}
   cellOptsFn ?= -> {}
-  rowOptsFn ?= -> {}
 
   numCols = _.reduce(
     colArgs
@@ -36,7 +35,7 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
             R.th {colspan: colWidths[ci]}, argVal
       ]
     ]
-    R.tbody {}, rows.map (row, rowNum) -> R.tr _.extend({}, rowOptsFn(row)), _.flatten [
+    R.tbody {}, rows.map (row, rowNum) -> R.tr {}, _.flatten [
       row.map ([name, val], rowIndex) ->
         if rowNum % rowHeights[rowIndex] == 0
           R.th {rowspan: rowHeights[rowIndex]}, val

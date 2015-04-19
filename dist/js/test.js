@@ -37,7 +37,7 @@
         cellFn: function(arg) {
           var m1, m2, m3, sign;
           sign = arg.sign, m1 = arg.m1, m2 = arg.m2, m3 = arg.m3;
-          return sign * m1 * m2 * m3;
+          return R.span(sign * m1 * m2 * m3);
         },
         cellOptsFn: function(arg) {
           var m2, sign;

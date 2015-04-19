@@ -11,7 +11,7 @@ $(document).ready -> $('body').append R.div {class: 'container'}, [
       {name: 'm2', values: [4,5,6]}
     ]
     tableOpts: class: 'table'
-    cellFn: ({sign, m1, m2, m3}) -> sign * m1 * m2 * m3
+    cellFn: ({sign, m1, m2, m3}) -> R.span sign * m1 * m2 * m3
     cellOptsFn: ({sign, m2}) ->
       {class: if m2 == 5 then 'info' else if sign == -1 then 'danger' else 'success'}
   }

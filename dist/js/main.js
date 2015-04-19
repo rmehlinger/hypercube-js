@@ -8,18 +8,13 @@
   bind = rx.bind;
 
   window.multiDim = multiDim = function(arg) {
-    var accum, cellFn, cellOptsFn, colArgs, colWidths, cols, numCols, numRows, rowArgs, rowHeights, rowOptsFn, rows, tableOpts;
-    rowArgs = arg.rowArgs, colArgs = arg.colArgs, cellFn = arg.cellFn, cellOptsFn = arg.cellOptsFn, tableOpts = arg.tableOpts, rowOptsFn = arg.rowOptsFn;
+    var accum, cellFn, cellOptsFn, colArgs, colWidths, cols, numCols, numRows, rowArgs, rowHeights, rows, tableOpts;
+    rowArgs = arg.rowArgs, colArgs = arg.colArgs, cellFn = arg.cellFn, cellOptsFn = arg.cellOptsFn, tableOpts = arg.tableOpts;
     if (tableOpts == null) {
       tableOpts = {};
     }
     if (cellOptsFn == null) {
       cellOptsFn = function() {
-        return {};
-      };
-    }
-    if (rowOptsFn == null) {
-      rowOptsFn = function() {
         return {};
       };
     }
@@ -82,7 +77,7 @@
           ];
         })
       ])), R.tbody({}, rows.map(function(row, rowNum) {
-        return R.tr(_.extend({}, rowOptsFn(row)), _.flatten([
+        return R.tr({}, _.flatten([
           row.map(function(arg1, rowIndex) {
             var name, val;
             name = arg1[0], val = arg1[1];
