@@ -78,7 +78,7 @@
             return 'round';
           }
         },
-        cellOptsFn: function(arg) {
+        cellOptsFn: function(__, arg) {
           var color1, color2;
           color1 = arg.color1, color2 = arg.color2;
           return {

@@ -26,7 +26,7 @@ $(document).ready -> $('body').append R.div {class: 'container'}, [
       {name: 'shape2', values: ['R', 'r']}
     ],
     cellFn: ({shape1, shape2}) -> if shape1 == shape2 == 'r' then 'wrinkled' else 'round'
-    cellOptsFn: ({color1, color2}) -> {
+    cellOptsFn: (__, {color1, color2}) -> {
       style: {
         padding: 5,
         backgroundColor: if color1 == color2 == 'g' then '#F5F6CE' else '#CEF6CE'
