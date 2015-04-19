@@ -35,7 +35,7 @@ two genes, e.g., whether a pea is green or yellow, and whether it is round or wr
 |**g** |**R** |  Round, Green  |  Round, Green  |  Round, Yellow  |  Round, Yellow  |
 |**g** |**r** |  Round, Green  |  Wrinkled, Green  |  Round, Yellow  |  Wrinkled, Yellow  |
 
-Unfortunately, HTML tables already embed
+Unfortunately, even two dimensional tables are difficult enough to work with in HTML, embedded as they are in a one dimensional tree structure. Attempting to layout higher dimensional tables is a tedious and difficult task. Hypercube-js simplifies that task, and does the hard work for you.
 
 # Usage
 
