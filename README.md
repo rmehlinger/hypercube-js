@@ -53,13 +53,37 @@ following fields:
 a `name` field and a `values` field. `name` fields must be unique.
 * `colArgs`: a list of argument objects which will define the columns of the table. Each element in the list should have
 a `name` field and a `values` field. `name` fields must be unique.
-* `tableOpts`: An object specifying the attributes--e.g., class, style, handlers--of the table element created
 * `cellFn`: Used to generate the contents of the table's cells. Takes an object as argument, with its keys being the 
 names specified in rowArgs and colArgs. May return a String, an HTML element, or a Reactive Coffee bind (see below).
-* `cellOptsFn`: A function which takes the same input as cellFn and is used to specify the attributes for each table 
-cell.
+* `cellOptsFn`: An optional function which takes the same input as cellFn and is used to specify the attributes for each table cell.
+* `tableOpts`: An optional object specifying the attributes--e.g., class, style, handlers--of the table element created
 
 It returns an HTML table element that can be freely embedded in the DOM. 
+
+## Example
+
+The following demonstrates how to create a version of the 4 dimensional Punnett square shown above, using CoffeeScript:
+
+```
+$('body').append multiDim {
+    rowArgs: [
+      {name: 'color1', values: ['G', 'g']},
+      {name: 'shape1', values: ['R', 'r']}
+    ],
+    colArgs: [
+      {name: 'color2', values: ['G', 'g']},
+      {name: 'shape2', values: ['R', 'r']}
+    ],
+    cellFn: ({shape1, shape2}) -> if shape1 == shape2 == 'r' then 'Wrinkled' else 'Round'
+    cellOptsFn: ({color1, color2}) -> {
+      style: {
+        padding: 5,
+        backgroundColor: if color1 == color2 == 'g' then '#F5F6CE' else '#CEF6CE'
+      }
+    }
+    tableOpts: {style: {border: '1px solid #333'}}
+  }
+```
 
 ## Reactive Coffee
 
