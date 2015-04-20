@@ -37,9 +37,6 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
   else
     indexedCellData = {}
 
-  console.log cellData
-  console.log indexedCellData
-
   return R.table tableOpts, _.flatten [
     R.thead {}, _.flatten [
       R.tr R.th {rowspan: colArgs.length * 2 + 1, colspan: rowArgs.length}

@@ -81,8 +81,6 @@
     } else {
       indexedCellData = {};
     }
-    console.log(cellData);
-    console.log(indexedCellData);
     return R.table(tableOpts, _.flatten([
       R.thead({}, _.flatten([
         R.tr(R.th({
