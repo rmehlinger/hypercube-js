@@ -15,11 +15,11 @@
       }, multiDim({
         rowArgs: [
           {
-            name: 'm3',
-            values: [1, 10, 100]
-          }, {
             name: 'sign',
             values: [-1, 1]
+          }, {
+            name: 'm3',
+            values: [1, 10, 100]
           }
         ],
         colArgs: [
@@ -32,7 +32,7 @@
           }
         ],
         tableOpts: {
-          "class": 'table'
+          "class": 'table table-condensed'
         },
         cellFn: function(arg) {
           var m1, m2, m3, sign;
@@ -49,7 +49,7 @@
       }))), R.div({
         "class": 'row'
       }, R.div({
-        "class": 'col-md-12'
+        "class": 'col-md-4'
       }, multiDim({
         rowArgs: [
           {
@@ -89,14 +89,12 @@
           };
         },
         tableOpts: {
-          style: {
-            border: '1px solid #333'
-          }
+          "class": 'table table-bordered table-condensed'
         }
-      }))), R.br(), R.div({
+      }))), R.div({
         "class": 'row'
       }, R.div({
-        "class": 'col-md-12'
+        "class": 'col-md-4'
       }, multiDim({
         rowArgs: [
           {
@@ -459,9 +457,7 @@
           }, shape);
         },
         tableOpts: {
-          style: {
-            border: '1px solid #333'
-          }
+          "class": 'table table-bordered table-condensed'
         }
       })))
     ]));

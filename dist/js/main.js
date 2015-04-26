@@ -8,7 +8,7 @@
   bind = rx.bind;
 
   window.multiDim = multiDim = function(arg) {
-    var accum, cellData, cellFn, cellOptsFn, colArgs, colWidths, cols, fmtfn, indexedCellData, numCols, numRows, rowArgs, rowHeights, rows, tableOpts;
+    var cellData, cellFn, cellOptsFn, colArgs, colArgsList, colWidths, cols, fmtfn, indexedCellData, numCols, numRows, rowArgs, rowArgsList, rowHeights, rows, tableOpts;
     rowArgs = arg.rowArgs, colArgs = arg.colArgs, cellFn = arg.cellFn, cellOptsFn = arg.cellOptsFn, tableOpts = arg.tableOpts, cellData = arg.cellData, fmtfn = arg.fmtfn;
     if (tableOpts == null) {
       tableOpts = {};
@@ -39,78 +39,163 @@
       values = arg1.values;
       return memo * values.length;
     }, 1);
-    accum = numCols;
-    colWidths = colArgs.map(function(arg1) {
-      var values;
-      values = arg1.values;
-      return accum /= values.length;
-    });
-    accum = numRows;
-    rowHeights = rowArgs.map(function(arg1) {
-      var values;
-      values = arg1.values;
-      return accum /= values.length;
-    });
-    rows = cartesianProduct.apply(null, rowArgs.map(function(arg1) {
-      var name, values;
-      name = arg1.name, values = arg1.values;
-      return values.map(function(value) {
-        return {
-          name: name,
-          value: value
-        };
+    rowArgsList = rx.array(rowArgs);
+    colArgsList = rx.array(colArgs);
+    colWidths = rx.cellToArray(bind(function() {
+      var accum;
+      accum = numCols;
+      return colArgsList.all().map(function(arg1) {
+        var values;
+        values = arg1.values;
+        return accum /= values.length;
       });
     }));
-    cols = cartesianProduct.apply(null, colArgs.map(function(arg1) {
-      var name, values;
-      name = arg1.name, values = arg1.values;
-      return values.map(function(value) {
-        return {
-          name: name,
-          value: value
-        };
+    rowHeights = rx.cellToArray(bind(function() {
+      var accum;
+      accum = numRows;
+      return rowArgsList.all().map(function(arg1) {
+        var values;
+        values = arg1.values;
+        return accum /= values.length;
       });
+    }));
+    rows = rx.cellToArray(bind(function() {
+      return cartesianProduct.apply(null, rowArgsList.map(function(arg1) {
+        var name, values;
+        name = arg1.name, values = arg1.values;
+        return values.map(function(value) {
+          return {
+            name: name,
+            value: value
+          };
+        });
+      }).all());
+    }));
+    cols = rx.cellToArray(bind(function() {
+      return cartesianProduct.apply(null, colArgsList.map(function(arg1) {
+        var name, values;
+        name = arg1.name, values = arg1.values;
+        return values.map(function(value) {
+          return {
+            name: name,
+            value: value
+          };
+        });
+      }).all());
     }));
     if (cellData) {
       indexedCellData = _.object(cellData.map(function(arg1) {
         var input, output;
         input = arg1.input, output = arg1.output;
-        console.log(_.pluck(_.sortBy(input, 'name'), 'value'));
         return [JSON.stringify(_.pluck(_.sortBy(input, 'name'), 'value')), output];
       }));
     } else {
       indexedCellData = {};
     }
     return R.table(tableOpts, _.flatten([
-      R.thead({}, _.flatten([
-        R.tr(R.th({
-          rowspan: colArgs.length * 2 + 1,
-          colspan: rowArgs.length
-        })), colArgs.map(function(arg1, ci) {
-          var i, name, ref, results, values;
-          name = arg1.name, values = arg1.values;
-          return [
-            R.tr(_.flatten((function() {
+      R.thead({}, rx.flatten([
+        bind(function() {
+          return colArgsList.all().map(function(arg1, ci) {
+            var i, name, ref, results, values;
+            name = arg1.name, values = arg1.values;
+            return R.tr({}, _.flatten([
+              R.th({
+                colspan: bind(function() {
+                  return rowArgsList.length();
+                }),
+                "class": 'corner-cell'
+              }, R.span({
+                "class": 'btn-group'
+              }, (function() {
+                var val;
+                val = colArgsList.at(ci);
+                return [
+                  ci > 0 ? R.button({
+                    "class": 'btn btn-default btn-xs',
+                    click: function() {
+                      colArgsList.removeAt(ci);
+                      return colArgsList.insert(val, ci - 1);
+                    }
+                  }, '^') : void 0, ci < colArgsList.length() - 1 ? R.button({
+                    "class": 'btn btn-default btn-xs',
+                    click: function() {
+                      colArgsList.removeAt(ci);
+                      return colArgsList.insert(val, ci + 2);
+                    }
+                  }, 'v') : void 0
+                ];
+              })())), (function() {
+                results = [];
+                for (var i = 0, ref = numCols / (colWidths.at(ci) * values.length); 0 <= ref ? i < ref : i > ref; 0 <= ref ? i++ : i--){ results.push(i); }
+                return results;
+              }).apply(this).map(function() {
+                return values.map(function(argVal) {
+                  return R.th({
+                    colspan: colWidths.at(ci),
+                    style: bind(function() {
+                      if (ci === colArgsList.length() - 1) {
+                        return {
+                          borderBottom: 'none'
+                        };
+                      }
+                    })
+                  }, argVal);
+                });
+              })
+            ]));
+          });
+        }), bind(function() {
+          var i, j, ref, ref1, results, results1;
+          return R.tr({}, rx.flatten([
+            (function() {
               results = [];
-              for (var i = 0, ref = numCols / (colWidths[ci] * values.length); 0 <= ref ? i < ref : i > ref; 0 <= ref ? i++ : i--){ results.push(i); }
+              for (var i = 0, ref = rowArgsList.length(); 0 <= ref ? i < ref : i > ref; 0 <= ref ? i++ : i--){ results.push(i); }
               return results;
+            }).apply(this).map(function(__, ri) {
+              return R.th({
+                "class": 'corner-cell'
+              }, R.span({
+                "class": 'btn-group'
+              }, (function() {
+                var val;
+                val = rowArgsList.at(ri);
+                return [
+                  ri > 0 ? R.button({
+                    "class": 'btn btn-xs btn-default',
+                    click: function() {
+                      rowArgsList.removeAt(ri);
+                      return rowArgsList.insert(val, ri - 1);
+                    }
+                  }, '<') : void 0, ri < rowArgsList.length() - 1 ? R.button({
+                    "class": 'btn btn-xs btn-default',
+                    click: function() {
+                      rowArgsList.removeAt(ri);
+                      return rowArgsList.insert(val, ri + 2);
+                    }
+                  }, '>') : void 0
+                ];
+              })()));
+            }), (function() {
+              results1 = [];
+              for (var j = 0, ref1 = cols.length(); 0 <= ref1 ? j < ref1 : j > ref1; 0 <= ref1 ? j++ : j--){ results1.push(j); }
+              return results1;
             }).apply(this).map(function() {
-              return values.map(function(argVal) {
-                return R.th({
-                  colspan: colWidths[ci]
-                }, argVal);
+              return R.th({
+                style: {
+                  borderTop: 'none'
+                }
               });
-            })))
-          ];
+            })
+          ]));
         })
       ])), R.tbody({}, rows.map(function(row, rowNum) {
-        return R.tr({}, _.flatten([
+        return R.tr({}, rx.flatten([
           row.map(function(arg1, rowIndex) {
             var name, value;
             name = arg1.name, value = arg1.value;
-            if (rowNum % rowHeights[rowIndex] === 0) {
+            if (rowNum % rowHeights.at(rowIndex) === 0) {
               return R.th({
-                rowspan: rowHeights[rowIndex]
+                rowspan: rowHeights.at(rowIndex)
               }, value);
             } else {
               return null;

@@ -4,19 +4,19 @@ $(document).ready -> $('body').append R.div {class: 'container'}, [
   R.br()
   R.div {class: 'row'}, R.div {class: 'col-md-12'}, multiDim {
     rowArgs: [
-      {name: 'm3', values: [1, 10, 100]}
       {name: 'sign', values: [-1, 1]}
+      {name: 'm3', values: [1, 10, 100]}
     ]
     colArgs: [
       {name: 'm1', values: [1,2,3]}
       {name: 'm2', values: [4,5,6]}
     ]
-    tableOpts: class: 'table'
+    tableOpts: class: 'table table-condensed'
     cellFn: ({sign, m1, m2, m3}) -> sign * m1 * m2 * m3
     cellOptsFn: (__, {sign, m2}) ->
       {class: if m2 == 5 then 'info' else if sign == -1 then 'danger' else 'success'}
   }
-  R.div {class: 'row'}, R.div {class: 'col-md-12'}, multiDim {
+  R.div {class: 'row'}, R.div {class: 'col-md-4'}, multiDim {
     rowArgs: [
       {name: 'color1', values: ['G', 'g']},
       {name: 'shape1', values: ['R', 'r']}
@@ -32,10 +32,9 @@ $(document).ready -> $('body').append R.div {class: 'container'}, [
         backgroundColor: if color1 == color2 == 'g' then '#F5F6CE' else '#CEF6CE'
       }
     }
-    tableOpts: {style: {border: '1px solid #333'}}
+    tableOpts: {class: 'table table-bordered table-condensed'}
   }
-  R.br()
-  R.div {class: 'row'}, R.div {class: 'col-md-12'}, multiDim {
+  R.div {class: 'row'}, R.div {class: 'col-md-4'}, multiDim {
     rowArgs: [
       {name: 'color1', values: ['G', 'g']},
       {name: 'shape1', values: ['R', 'r']}
@@ -69,6 +68,6 @@ $(document).ready -> $('body').append R.div {class: 'container'}, [
       }
     }
     fmtfn: ({shape}, __) -> R.span {style: fontStyle: if shape == 'wrinkled' then 'italic' else 'normal'}, shape
-    tableOpts: {style: {border: '1px solid #333'}}
+    tableOpts: {class: 'table table-bordered table-condensed'}
   }
 ]
