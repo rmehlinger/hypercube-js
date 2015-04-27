@@ -75,6 +75,8 @@ Defaults to `_.identity`. Takes up to two arguments:
     * The value of the cell.
     * The list of input arguments, formatted as per cellFn. 
 * `tableOpts`: An optional object specifying the attributes--e.g., class, style, handlers--of the table element created.
+* `rearrangeable`: an optional boolean argument indicating whether argument reordering and row-column swapping is
+permitted
 
 It returns an HTML table element that can be freely embedded in the DOM. The table can be generated in one of two ways:
 using static data, passed in by the `cellData` argument, or by using `cellFn`. If both `cellData` and `cellFn` are

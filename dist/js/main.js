@@ -8,8 +8,8 @@
   bind = rx.bind;
 
   window.multiDim = multiDim = function(arg) {
-    var cellData, cellFn, cellOptsFn, colArgs, colArgsList, colWidths, cols, fmtfn, indexedCellData, numCols, numRows, rowArgs, rowArgsList, rowHeights, rows, tableOpts;
-    rowArgs = arg.rowArgs, colArgs = arg.colArgs, cellFn = arg.cellFn, cellOptsFn = arg.cellOptsFn, tableOpts = arg.tableOpts, cellData = arg.cellData, fmtfn = arg.fmtfn;
+    var cellData, cellFn, cellOptsFn, colArgs, colArgsList, colWidths, cols, fmtfn, indexedCellData, numCols, numRows, rearrangeable, rowArgs, rowArgsList, rowHeights, rows, tableOpts;
+    rowArgs = arg.rowArgs, colArgs = arg.colArgs, cellFn = arg.cellFn, cellOptsFn = arg.cellOptsFn, tableOpts = arg.tableOpts, cellData = arg.cellData, fmtfn = arg.fmtfn, rearrangeable = arg.rearrangeable;
     if (tableOpts == null) {
       tableOpts = {};
     }
@@ -103,7 +103,7 @@
             var i, name, ref, results, values;
             name = arg1.name, values = arg1.values;
             return R.tr({}, _.flatten([
-              R.th({
+              rearrangeable ? R.th({
                 colspan: bind(function() {
                   return rowArgsList.length();
                 }),
@@ -114,19 +114,19 @@
                 var val;
                 val = colArgsList.at(ci);
                 return [
-                  ci > 0 ? R.button({
-                    "class": 'btn btn-default btn-xs',
-                    click: function() {
-                      colArgsList.removeAt(ci);
-                      return colArgsList.insert(val, ci - 1);
-                    }
-                  }, '^') : void 0, colArgsList.length() > 1 ? R.button({
+                  colArgsList.length() > 1 ? R.button({
                     "class": 'btn btn-xs btn-default',
                     click: function() {
                       colArgsList.removeAt(ci);
                       return rowArgsList.push(val);
                     }
-                  }, '<') : void 0, ci < colArgsList.length() - 1 ? R.button({
+                  }, '<') : void 0, ci > 0 ? R.button({
+                    "class": 'btn btn-default btn-xs',
+                    click: function() {
+                      colArgsList.removeAt(ci);
+                      return colArgsList.insert(val, ci - 1);
+                    }
+                  }, '^') : void 0, ci < colArgsList.length() - 1 ? R.button({
                     "class": 'btn btn-default btn-xs',
                     click: function() {
                       colArgsList.removeAt(ci);
@@ -134,7 +134,15 @@
                     }
                   }, 'v') : void 0
                 ];
-              })())), (function() {
+              })())) : void 0, !rearrangeable && ci === 0 ? R.th({
+                "class": 'corner-cell',
+                rowspan: bind(function() {
+                  return colArgsList.length();
+                }),
+                colspan: bind(function() {
+                  return rowArgsList.length();
+                })
+              }) : void 0, (function() {
                 results = [];
                 for (var i = 0, ref = numCols.get() / (colWidths.at(ci) * values.length); 0 <= ref ? i < ref : i > ref; 0 <= ref ? i++ : i--){ results.push(i); }
                 return results;
@@ -156,7 +164,7 @@
           });
         }), bind(function() {
           var i, j, ref, ref1, results, results1;
-          if (rowArgsList.length() > 1) {
+          if (rowArgsList.length() > 1 && rearrangeable) {
             return R.tr({}, rx.flatten([
               (function() {
                 results = [];
@@ -171,19 +179,19 @@
                   var val;
                   val = rowArgsList.at(ri);
                   return [
-                    ri > 0 ? R.button({
-                      "class": 'btn btn-xs btn-default',
-                      click: function() {
-                        rowArgsList.removeAt(ri);
-                        return rowArgsList.insert(val, ri - 1);
-                      }
-                    }, '<') : void 0, rowArgsList.length() > 1 ? R.button({
+                    rowArgsList.length() > 1 ? R.button({
                       "class": 'btn btn-xs btn-default',
                       click: function() {
                         rowArgsList.removeAt(ri);
                         return colArgsList.push(val);
                       }
-                    }, '^') : void 0, ri < rowArgsList.length() - 1 ? R.button({
+                    }, '^') : void 0, ri > 0 ? R.button({
+                      "class": 'btn btn-xs btn-default',
+                      click: function() {
+                        rowArgsList.removeAt(ri);
+                        return rowArgsList.insert(val, ri - 1);
+                      }
+                    }, '<') : void 0, ri < rowArgsList.length() - 1 ? R.button({
                       "class": 'btn btn-xs btn-default',
                       click: function() {
                         rowArgsList.removeAt(ri);

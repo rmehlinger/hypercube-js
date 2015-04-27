@@ -45,7 +45,8 @@
           return {
             "class": m2 === 5 ? 'info' : sign === -1 ? 'danger' : 'success'
           };
-        }
+        },
+        rearrangeable: true
       }))), R.div({
         "class": 'row'
       }, R.div({

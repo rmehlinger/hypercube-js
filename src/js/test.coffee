@@ -15,6 +15,7 @@ $(document).ready -> $('body').append R.div {class: 'container'}, [
     cellFn: ({sign, m1, m2, m3}) -> sign * m1 * m2 * m3
     cellOptsFn: (__, {sign, m2}) ->
       {class: if m2 == 5 then 'info' else if sign == -1 then 'danger' else 'success'}
+    rearrangeable: true
   }
   R.div {class: 'row'}, R.div {class: 'col-md-4'}, multiDim {
     rowArgs: [
