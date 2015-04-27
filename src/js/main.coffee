@@ -8,27 +8,27 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
   fmtfn ?= _.identity
   cellFn ?= -> ""
 
-  numCols = _.reduce(
-    colArgs
-    (memo, {values}) -> memo * values.length
-    1
-  )
-
-  numRows = _.reduce(
-    rowArgs
-    (memo, {values}) -> memo * values.length
-    1
-  )
-
   rowArgsList = rx.array(rowArgs)
   colArgsList = rx.array(colArgs)
 
+  numCols = bind -> _.reduce(
+    colArgsList.all()
+    (memo, {values}) -> memo * values.length
+    1
+  )
+
+  numRows = bind -> _.reduce(
+    rowArgsList.all()
+    (memo, {values}) -> memo * values.length
+    1
+  )
+
   colWidths = rx.cellToArray bind ->
-    accum = numCols
+    accum = numCols.get()
     colArgsList.all().map ({values}) -> accum /= values.length
 
   rowHeights = rx.cellToArray bind ->
-    accum = numRows
+    accum = numRows.get()
     rowArgsList.all().map ({values}) -> accum /= values.length
 
   rows = rx.cellToArray bind -> cartesianProduct(
@@ -62,6 +62,12 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
                   colArgsList.removeAt(ci)
                   colArgsList.insert(val, ci - 1)
               }, '^'
+              if colArgsList.length() > 1 then R.button {
+                class: 'btn btn-xs btn-default'
+                click: ->
+                  colArgsList.removeAt(ci)
+                  rowArgsList.push(val)
+              }, '<'
               if ci < colArgsList.length() - 1 then R.button {
                 class: 'btn btn-default btn-xs'
                 click: ->
@@ -69,12 +75,12 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
                   colArgsList.insert(val, ci + 2)
               }, 'v'
             ]
-          [0...numCols/(colWidths.at(ci) * values.length)].map -> values.map (argVal) ->
+          [0...numCols.get()/(colWidths.at(ci) * values.length)].map -> values.map (argVal) ->
             R.th {colspan: colWidths.at(ci), style: bind -> if ci == colArgsList.length() - 1 then {borderBottom: 'none'}},
               argVal
         ]
       )
-      bind -> R.tr {}, rx.flatten [
+      bind -> if rowArgsList.length() > 1 then R.tr {}, rx.flatten [
         [0...rowArgsList.length()].map (__, ri) -> R.th {class: 'corner-cell'},
           R.span {class: 'btn-group'}, do ->
             val = rowArgsList.at(ri)
@@ -85,6 +91,12 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
                   rowArgsList.removeAt(ri)
                   rowArgsList.insert(val, ri - 1)
               }, '<'
+              if rowArgsList.length() > 1 then R.button {
+                class: 'btn btn-xs btn-default'
+                click: ->
+                  rowArgsList.removeAt(ri)
+                  colArgsList.push(val)
+              }, '^'
               if ri < rowArgsList.length() - 1 then R.button {
                 class: 'btn btn-xs btn-default'
                 click: ->
@@ -92,7 +104,8 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
                   rowArgsList.insert(val, ri + 2)
               }, '>'
             ]
-        [0...cols.length()].map -> R.th {style: borderTop: 'none'}
+        [0...cols.length()].map ->
+          R.th {style: borderTop: 'none'}
       ]
     ]
     R.tbody {}, rows.map (row, rowNum) ->

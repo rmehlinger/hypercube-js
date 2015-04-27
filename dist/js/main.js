@@ -29,21 +29,25 @@
         return "";
       };
     }
-    numCols = _.reduce(colArgs, function(memo, arg1) {
-      var values;
-      values = arg1.values;
-      return memo * values.length;
-    }, 1);
-    numRows = _.reduce(rowArgs, function(memo, arg1) {
-      var values;
-      values = arg1.values;
-      return memo * values.length;
-    }, 1);
     rowArgsList = rx.array(rowArgs);
     colArgsList = rx.array(colArgs);
+    numCols = bind(function() {
+      return _.reduce(colArgsList.all(), function(memo, arg1) {
+        var values;
+        values = arg1.values;
+        return memo * values.length;
+      }, 1);
+    });
+    numRows = bind(function() {
+      return _.reduce(rowArgsList.all(), function(memo, arg1) {
+        var values;
+        values = arg1.values;
+        return memo * values.length;
+      }, 1);
+    });
     colWidths = rx.cellToArray(bind(function() {
       var accum;
-      accum = numCols;
+      accum = numCols.get();
       return colArgsList.all().map(function(arg1) {
         var values;
         values = arg1.values;
@@ -52,7 +56,7 @@
     }));
     rowHeights = rx.cellToArray(bind(function() {
       var accum;
-      accum = numRows;
+      accum = numRows.get();
       return rowArgsList.all().map(function(arg1) {
         var values;
         values = arg1.values;
@@ -116,7 +120,13 @@
                       colArgsList.removeAt(ci);
                       return colArgsList.insert(val, ci - 1);
                     }
-                  }, '^') : void 0, ci < colArgsList.length() - 1 ? R.button({
+                  }, '^') : void 0, colArgsList.length() > 1 ? R.button({
+                    "class": 'btn btn-xs btn-default',
+                    click: function() {
+                      colArgsList.removeAt(ci);
+                      return rowArgsList.push(val);
+                    }
+                  }, '<') : void 0, ci < colArgsList.length() - 1 ? R.button({
                     "class": 'btn btn-default btn-xs',
                     click: function() {
                       colArgsList.removeAt(ci);
@@ -126,7 +136,7 @@
                 ];
               })())), (function() {
                 results = [];
-                for (var i = 0, ref = numCols / (colWidths.at(ci) * values.length); 0 <= ref ? i < ref : i > ref; 0 <= ref ? i++ : i--){ results.push(i); }
+                for (var i = 0, ref = numCols.get() / (colWidths.at(ci) * values.length); 0 <= ref ? i < ref : i > ref; 0 <= ref ? i++ : i--){ results.push(i); }
                 return results;
               }).apply(this).map(function() {
                 return values.map(function(argVal) {
@@ -146,47 +156,55 @@
           });
         }), bind(function() {
           var i, j, ref, ref1, results, results1;
-          return R.tr({}, rx.flatten([
-            (function() {
-              results = [];
-              for (var i = 0, ref = rowArgsList.length(); 0 <= ref ? i < ref : i > ref; 0 <= ref ? i++ : i--){ results.push(i); }
-              return results;
-            }).apply(this).map(function(__, ri) {
-              return R.th({
-                "class": 'corner-cell'
-              }, R.span({
-                "class": 'btn-group'
-              }, (function() {
-                var val;
-                val = rowArgsList.at(ri);
-                return [
-                  ri > 0 ? R.button({
-                    "class": 'btn btn-xs btn-default',
-                    click: function() {
-                      rowArgsList.removeAt(ri);
-                      return rowArgsList.insert(val, ri - 1);
-                    }
-                  }, '<') : void 0, ri < rowArgsList.length() - 1 ? R.button({
-                    "class": 'btn btn-xs btn-default',
-                    click: function() {
-                      rowArgsList.removeAt(ri);
-                      return rowArgsList.insert(val, ri + 2);
-                    }
-                  }, '>') : void 0
-                ];
-              })()));
-            }), (function() {
-              results1 = [];
-              for (var j = 0, ref1 = cols.length(); 0 <= ref1 ? j < ref1 : j > ref1; 0 <= ref1 ? j++ : j--){ results1.push(j); }
-              return results1;
-            }).apply(this).map(function() {
-              return R.th({
-                style: {
-                  borderTop: 'none'
-                }
-              });
-            })
-          ]));
+          if (rowArgsList.length() > 1) {
+            return R.tr({}, rx.flatten([
+              (function() {
+                results = [];
+                for (var i = 0, ref = rowArgsList.length(); 0 <= ref ? i < ref : i > ref; 0 <= ref ? i++ : i--){ results.push(i); }
+                return results;
+              }).apply(this).map(function(__, ri) {
+                return R.th({
+                  "class": 'corner-cell'
+                }, R.span({
+                  "class": 'btn-group'
+                }, (function() {
+                  var val;
+                  val = rowArgsList.at(ri);
+                  return [
+                    ri > 0 ? R.button({
+                      "class": 'btn btn-xs btn-default',
+                      click: function() {
+                        rowArgsList.removeAt(ri);
+                        return rowArgsList.insert(val, ri - 1);
+                      }
+                    }, '<') : void 0, rowArgsList.length() > 1 ? R.button({
+                      "class": 'btn btn-xs btn-default',
+                      click: function() {
+                        rowArgsList.removeAt(ri);
+                        return colArgsList.push(val);
+                      }
+                    }, '^') : void 0, ri < rowArgsList.length() - 1 ? R.button({
+                      "class": 'btn btn-xs btn-default',
+                      click: function() {
+                        rowArgsList.removeAt(ri);
+                        return rowArgsList.insert(val, ri + 2);
+                      }
+                    }, '>') : void 0
+                  ];
+                })()));
+              }), (function() {
+                results1 = [];
+                for (var j = 0, ref1 = cols.length(); 0 <= ref1 ? j < ref1 : j > ref1; 0 <= ref1 ? j++ : j--){ results1.push(j); }
+                return results1;
+              }).apply(this).map(function() {
+                return R.th({
+                  style: {
+                    borderTop: 'none'
+                  }
+                });
+              })
+            ]));
+          }
         })
       ])), R.tbody({}, rows.map(function(row, rowNum) {
         return R.tr({}, rx.flatten([
