@@ -11,32 +11,41 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
   rowArgsList = rx.array(rowArgs)
   colArgsList = rx.array(colArgs)
 
-  numCols = bind -> _.reduce(
-    colArgsList.all()
-    (memo, {values}) -> memo * values.length
-    1
-  )
+  rows = bind ->
+    num = _.reduce(
+      rowArgsList.all()
+      (memo, {values}) -> memo * values.length
+      1
+    )
+    return {
+      num
+      heights: do ->
+        accum = num
+        rowArgsList.all().map ({values}) -> accum /= values.length
+      values: cartesianProduct(
+        rowArgsList.map(({name, values}) -> values.map (value) -> {name, value}).all()...
+      )
+    }
 
-  numRows = bind -> _.reduce(
-    rowArgsList.all()
-    (memo, {values}) -> memo * values.length
-    1
-  )
 
-  colWidths = rx.cellToArray bind ->
-    accum = numCols.get()
-    colArgsList.all().map ({values}) -> accum /= values.length
+  cols = bind ->
+    num = _.reduce(
+      colArgsList.all()
+      (memo, {values}) -> memo * values.length
+      1
+    )
 
-  rowHeights = rx.cellToArray bind ->
-    accum = numRows.get()
-    rowArgsList.all().map ({values}) -> accum /= values.length
+    values = cartesianProduct(
+      colArgsList.map(({name, values}) -> values.map (value) -> {name, value}).all()...
+    )
 
-  rows = rx.cellToArray bind -> cartesianProduct(
-    rowArgsList.map(({name, values}) -> values.map (value) -> {name, value}).all()...
-  )
-  cols = rx.cellToArray bind -> cartesianProduct(
-    colArgsList.map(({name, values}) -> values.map (value) -> {name, value}).all()...
-  )
+    return {
+      num
+      widths: do ->
+        accum = num
+        colArgsList.all().map ({values}) -> accum /= values.length
+      values
+    }
 
   if cellData
     indexedCellData = _.object cellData.map ({input, output}) -> [
@@ -48,7 +57,6 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
   return R.table tableOpts, _.flatten [
     R.thead {}, rx.flatten [
       bind -> colArgsList.all().map ({name, values}, ci) ->
-        #R.tr [0...numCols/(colWidths[ci] * values.length)].map -> R.th {colspan: colWidths[ci] * values.length}, name
         R.tr {}, _.flatten [
           if rearrangeable then R.th {
             colspan: bind -> rowArgsList.length()
@@ -58,19 +66,19 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
             [
               if colArgsList.length() > 1 then R.button {
                 class: 'btn btn-xs btn-default'
-                click: ->
+                click: -> rx.transaction ->
                   colArgsList.removeAt(ci)
                   rowArgsList.push(val)
               }, '<'
               if ci > 0 then R.button {
                 class: 'btn btn-default btn-xs'
-                click: ->
+                click: -> rx.transaction ->
                   colArgsList.removeAt(ci)
                   colArgsList.insert(val, ci - 1)
               }, '^'
               if ci < colArgsList.length() - 1 then R.button {
                 class: 'btn btn-default btn-xs'
-                click: ->
+                click: -> rx.transaction ->
                   colArgsList.removeAt(ci)
                   colArgsList.insert(val, ci + 2)
               }, 'v'
@@ -80,9 +88,9 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
             rowspan: bind -> colArgsList.length()
             colspan: bind -> rowArgsList.length()
           }
-          [0...numCols.get()/(colWidths.at(ci) * values.length)].map -> values.map (argVal) ->
+          [0...cols.get().num/(cols.get().widths[ci] * values.length)].map -> values.map (argVal) ->
             R.th {
-              colspan: colWidths.at(ci),
+              colspan: cols.get().widths[ci],
               style: bind -> if ci == colArgsList.length() - 1 then {borderBottom: 'none'}
             }, argVal
         ]
@@ -93,41 +101,44 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
             [
               if rowArgsList.length() > 1 then R.button {
                 class: 'btn btn-xs btn-default'
-                click: ->
+                click: -> rx.transaction ->
                   rowArgsList.removeAt(ri)
                   colArgsList.push(val)
               }, '^'
               if ri > 0 then R.button {
                 class: 'btn btn-xs btn-default'
-                click: ->
+                click: -> rx.transaction ->
                   rowArgsList.removeAt(ri)
                   rowArgsList.insert(val, ri - 1)
               }, '<'
               if ri < rowArgsList.length() - 1 then R.button {
                 class: 'btn btn-xs btn-default'
-                click: ->
+                click: -> rx.transaction ->
                   rowArgsList.removeAt(ri)
                   rowArgsList.insert(val, ri + 2)
               }, '>'
             ]
-        [0...cols.length()].map ->
+        [0...cols.get().values.length].map ->
           R.th {style: borderTop: 'none'}
       ]
     ]
-    R.tbody {}, rows.map (row, rowNum) ->
-      R.tr {}, rx.flatten [
-        row.map ({name, value}, rowIndex) ->
-          if rowNum % rowHeights.at(rowIndex) == 0
-            R.th {rowspan: rowHeights.at(rowIndex)}, value
-          else null
-        cols.map (col) ->
-          argVals = _.sortBy row.concat(col), 'name'
-          argString = JSON.stringify _.pluck argVals, 'value'
-          argDict = _.object argVals.map ({name, value}) -> [name, value]
-          cellVal = if argString of indexedCellData then indexedCellData[argString] else cellFn argDict
+    R.tbody {}, bind -> rows.get().values.map (row, rowNum) ->
+      R.tr {}, rx.flatten _.flatten do ->
+        [
+          row.map ({name, value}, rowIndex) -> bind ->
+            if rowNum % rows.get().heights[rowIndex] == 0
+              R.th {rowspan: rows.get().heights[rowIndex]}, value
+            else null
+          bind -> cols.get().values.map (col) ->
+            argVals = _.sortBy row.concat(col), 'name'
+            argString = JSON.stringify _.pluck argVals, 'value'
+            argDict = _.object argVals.map ({name, value}) -> [name, value]
 
-          R.td _.extend({}, cellOptsFn(cellVal, argDict)), fmtfn cellVal, argDict
-      ]
+            console.log argString, argDict
+            cellVal = if argString of indexedCellData then indexedCellData[argString] else cellFn argDict
+
+            R.td _.extend({}, cellOptsFn(cellVal, argDict)), fmtfn cellVal, argDict
+        ]
   ]
 
 cartesianProduct = (lists...) ->
