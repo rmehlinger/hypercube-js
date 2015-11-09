@@ -1,7 +1,7 @@
 {
   "name": "hypercube-js",
   "main": "./src/js/main",
-  "version": "0.1.3",
+  "version": "0.1.4-alpha",
   "authors": [
     "Richard Mehlinger <rmehlinger@gmail.com>"
   ],
