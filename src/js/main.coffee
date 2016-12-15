@@ -1,3 +1,5 @@
+rx = window.rx ? require 'reactive-coffee'
+_ = window._ ? require 'underscore'
 R = rx.rxt.tags
 {bind} = rx
 

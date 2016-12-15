@@ -1,0 +1,28 @@
+{
+  "name": "hypercube-js",
+  "version": "0.1.4-alpha",
+  "description": "Javascript library for building and working with multidimensional tables",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rmehlinger/hypercube-js.git"
+  },
+  "keywords": [
+    "tables",
+    "data-viz",
+    "multidimensional"
+  ],
+  "author": "Richard Mehlinger",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/rmehlinger/hypercube-js/issues"
+  },
+  "homepage": "https://github.com/rmehlinger/hypercube-js#readme",
+  "dependencies": {
+    "reactive-coffee": "^1.3.2",
+    "underscore": "^1.8.3"
+  }
+}
