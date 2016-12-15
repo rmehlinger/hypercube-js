@@ -134,7 +134,6 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
             argString = JSON.stringify _.pluck argVals, 'value'
             argDict = _.object argVals.map ({name, value}) -> [name, value]
 
-            console.log argString, argDict
             cellVal = if argString of indexedCellData then indexedCellData[argString] else cellFn argDict
 
             R.td _.extend({}, cellOptsFn(cellVal, argDict)), fmtfn cellVal, argDict
