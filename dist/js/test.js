@@ -825,7 +825,9 @@
   ];
 
   capitalize = function(n) {
-    return "" + (n[0].toUpperCase()) + n.slice(1);
+    return R.span(rx.bind(function() {
+      return "" + (n[0].toUpperCase()) + n.slice(1);
+    }));
   };
 
   $(document).ready(function() {
@@ -1331,17 +1333,22 @@
             values: ['Primary', 'Secondary', 'Tertiary']
           }, {
             name: 'age',
-            values: ['< 40', '> 40']
+            values: ['< 40', '> 40'],
+            fmtfn: function(v) {
+              return R.span(rx.bind(function() {
+                return v;
+              }));
+            }
           }
         ],
         colArgs: [
           {
+            name: 'sex',
+            values: ['M', 'F']
+          }, {
             name: 'country',
             values: ['denmark', 'finland', 'norway', 'sweden'],
             fmtfn: capitalize
-          }, {
-            name: 'sex',
-            values: ['M', 'F']
           }
         ],
         cellOptsFn: function() {
@@ -1370,12 +1377,12 @@
         ],
         colArgs: [
           {
+            name: 'age',
+            values: ['< 40', '> 40']
+          }, {
             name: 'country',
             values: ['denmark', 'finland', 'norway', 'sweden'],
             fmtfn: capitalize
-          }, {
-            name: 'age',
-            values: ['< 40', '> 40']
           }
         ],
         cellData: demoData,

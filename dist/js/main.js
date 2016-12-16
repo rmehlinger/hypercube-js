@@ -60,7 +60,7 @@
             return {
               name: name,
               value: value,
-              display: (fmtfn != null ? fmtfn : _.identity)(value)
+              fmtfn: fmtfn != null ? fmtfn : _.identity
             };
           });
         }).all())
@@ -80,7 +80,7 @@
           return {
             name: name,
             value: value,
-            display: (fmtfn != null ? fmtfn : _.identity)(value)
+            fmtfn: fmtfn != null ? fmtfn : _.identity
           };
         });
       }).all());
@@ -243,14 +243,14 @@
           return R.tr({}, rx.flatten(_.flatten((function() {
             return [
               row.map(function(arg1, rowIndex) {
-                var display, name, value;
-                name = arg1.name, value = arg1.value, display = arg1.display;
+                var fmtfn, name, value;
+                name = arg1.name, value = arg1.value, fmtfn = arg1.fmtfn;
                 return bind(function() {
                   if (rowNum % rows.get().heights[rowIndex] === 0) {
                     return R.th({
                       rowspan: rows.get().heights[rowIndex],
                       title: name
-                    }, display);
+                    }, fmtfn(value));
                   } else {
                     return null;
                   }

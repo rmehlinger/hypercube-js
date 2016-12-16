@@ -51,7 +51,7 @@ demoData = [
   {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"M"}, {"name": "country", "value":"sweden"}],  "output": "348.8k"}
 ]
 
-capitalize = (n) -> "#{n[0].toUpperCase()}#{n[1...]}"
+capitalize = (n) -> R.span rx.bind -> "#{n[0].toUpperCase()}#{n[1...]}"
 
 $(document).ready -> $('body').append R.div {class: 'container'}, [
   R.br()
@@ -141,11 +141,14 @@ $(document).ready -> $('body').append R.div {class: 'container'}, [
     cellData: demoData
     rowArgs: [
       {name: 'education', values: ['Primary', 'Secondary', 'Tertiary']},
-      {name: 'age', values: ['< 40', '> 40']}
+      {
+        name: 'age', values: ['< 40', '> 40'],
+        fmtfn: (v) -> R.span rx.bind -> v
+      }
     ],
     colArgs: [
-      {name: 'country', values: ['denmark', 'finland', 'norway', 'sweden'], fmtfn: capitalize}
       {name: 'sex', values: ['M', 'F']}
+      {name: 'country', values: ['denmark', 'finland', 'norway', 'sweden'], fmtfn: capitalize}
     ],
     cellOptsFn: -> {style: {padding: 5}}
     tableOpts: {class: 'table table-bordered table-condensed'}
@@ -156,8 +159,8 @@ $(document).ready -> $('body').append R.div {class: 'container'}, [
       {name: 'education', values: ['Primary', 'Secondary', 'Tertiary']},
     ],
     colArgs: [
-      {name: 'country', values: ['denmark', 'finland', 'norway', 'sweden'], fmtfn: capitalize}
       {name: 'age', values: ['< 40', '> 40']}
+      {name: 'country', values: ['denmark', 'finland', 'norway', 'sweden'], fmtfn: capitalize}
     ],
     cellData: demoData
     cellOptsFn: -> {style: {padding: 5}}

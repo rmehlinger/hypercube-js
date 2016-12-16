@@ -26,7 +26,7 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
         rowArgsList.all().map ({values}) -> accum /= values.length
       values: cartesianProduct(
         rowArgsList.map(
-          ({name, values, fmtfn}) -> values.map (value) -> {name, value, display: (fmtfn ? _.identity) value}
+          ({name, values, fmtfn}) -> values.map (value) -> {name, value, fmtfn: (fmtfn ? _.identity)}
         ).all()...
       )
     }
@@ -41,7 +41,7 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
 
     values = cartesianProduct(
       colArgsList.map(
-        ({name, values}) -> values.map (value) -> {name, value, display: (fmtfn ? _.identity) value}
+        ({name, values}) -> values.map (value) -> {name, value, fmtfn: (fmtfn ? _.identity)}
       ).all()...
     )
 
@@ -132,9 +132,9 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
     R.tbody {}, bind -> rows.get().values.map (row, rowNum) ->
       R.tr {}, rx.flatten _.flatten do ->
         [
-          row.map ({name, value, display}, rowIndex) -> bind ->
+          row.map ({name, value, fmtfn}, rowIndex) -> bind ->
             if rowNum % rows.get().heights[rowIndex] == 0
-              R.th {rowspan: rows.get().heights[rowIndex], title: name}, display
+              R.th {rowspan: rows.get().heights[rowIndex], title: name}, fmtfn value
             else null
           bind -> cols.get().values.map (col) ->
             argVals = _.sortBy row.concat(col), 'name'
