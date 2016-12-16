@@ -25,7 +25,9 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
         accum = num
         rowArgsList.all().map ({values}) -> accum /= values.length
       values: cartesianProduct(
-        rowArgsList.map(({name, values}) -> values.map (value) -> {name, value}).all()...
+        rowArgsList.map(
+          ({name, values, fmtfn}) -> values.map (value) -> {name, value, display: (fmtfn ? _.identity) value}
+        ).all()...
       )
     }
 
@@ -38,7 +40,9 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
     )
 
     values = cartesianProduct(
-      colArgsList.map(({name, values}) -> values.map (value) -> {name, value}).all()...
+      colArgsList.map(
+        ({name, values}) -> values.map (value) -> {name, value, display: (fmtfn ? _.identity) value}
+      ).all()...
     )
 
     return {
@@ -58,7 +62,7 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
 
   return R.table tableOpts, _.flatten [
     R.thead {}, rx.flatten [
-      bind -> colArgsList.all().map ({name, values}, ci) ->
+      bind -> colArgsList.all().map ({name, values, fmtfn}, ci) ->
         R.tr {}, _.flatten [
           if rearrangeable then R.th {
             colspan: bind -> rowArgsList.length()
@@ -92,9 +96,10 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
           }
           [0...cols.get().num/(cols.get().widths[ci] * values.length)].map -> values.map (argVal) ->
             R.th {
+              title: name
               colspan: cols.get().widths[ci],
               style: bind -> if ci == colArgsList.length() - 1 then {borderBottom: 'none'}
-            }, argVal
+            }, (fmtfn ? _.identity) argVal
         ]
       bind -> if rowArgsList.length() > 1 and rearrangeable then R.tr {}, rx.flatten [
         [0...rowArgsList.length()].map (__, ri) -> R.th {class: 'corner-cell'},
@@ -127,9 +132,9 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
     R.tbody {}, bind -> rows.get().values.map (row, rowNum) ->
       R.tr {}, rx.flatten _.flatten do ->
         [
-          row.map ({name, value}, rowIndex) -> bind ->
+          row.map ({name, value, display}, rowIndex) -> bind ->
             if rowNum % rows.get().heights[rowIndex] == 0
-              R.th {rowspan: rows.get().heights[rowIndex]}, value
+              R.th {rowspan: rows.get().heights[rowIndex], title: name}, display
             else null
           bind -> cols.get().values.map (col) ->
             argVals = _.sortBy row.concat(col), 'name'

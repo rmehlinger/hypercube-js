@@ -1,55 +1,57 @@
 R = rx.rxt.tags
 
 demoData = [
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"F"}, {"name": "country", "value":"Denmark"}], "output": "483k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"F"}, {"name": "country", "value":"Finland"}], "output": "691.8k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"F"}, {"name": "country", "value":"Norway"}],  "output": "339.6k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"F"}, {"name": "country", "value":"Sweden"}],  "output": "530.4k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"M"}, {"name": "country", "value":"Denmark"}], "output": "453k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"M"}, {"name": "country", "value":"Finland"}], "output": "700.2k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"M"}, {"name": "country", "value":"Norway"}],  "output": "329.4k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"M"}, {"name": "country", "value":"Sweden"}],  "output": "556.2k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"F"}, {"name": "country", "value":"Denmark"}], "output": "510.6k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"F"}, {"name": "country", "value":"Finland"}], "output": "519.6k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"F"}, {"name": "country", "value":"Norway"}],  "output": "462k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"F"}, {"name": "country", "value":"Sweden"}],  "output": "1091.4k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"M"}, {"name": "country", "value":"Denmark"}], "output": "579.6k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"M"}, {"name": "country", "value":"Finland"}], "output": "564.6k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"M"}, {"name": "country", "value":"Norway"}],  "output": "523.8k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"M"}, {"name": "country", "value":"Sweden"}],  "output": "1200k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"F"}, {"name": "country", "value":"Denmark"}], "output": "387.6k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"F"}, {"name": "country", "value":"Finland"}], "output": "444.6k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"F"}, {"name": "country", "value":"Norway"}],  "output": "384.6k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"F"}, {"name": "country", "value":"Sweden"}],  "output": "709.2k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"M"}, {"name": "country", "value":"Denmark"}], "output": "309.6k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"M"}, {"name": "country", "value":"Finland"}], "output": "335.4k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"M"}, {"name": "country", "value":"Norway"}],  "output": "315.6k"},
-  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"M"}, {"name": "country", "value":"Sweden"}],  "output": "523.2k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"F"}, {"name": "country", "value":"Denmark"}], "output": "322k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"F"}, {"name": "country", "value":"Finland"}], "output": "461.2k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"F"}, {"name": "country", "value":"Norway"}],  "output": "226.4k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"F"}, {"name": "country", "value":"Sweden"}],  "output": "353.6k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"M"}, {"name": "country", "value":"Denmark"}], "output": "302k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"M"}, {"name": "country", "value":"Finland"}], "output": "466.8k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"M"}, {"name": "country", "value":"Norway"}],  "output": "219.6k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"M"}, {"name": "country", "value":"Sweden"}],  "output": "370.8k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"F"}, {"name": "country", "value":"Denmark"}], "output": "340.4k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"F"}, {"name": "country", "value":"Finland"}], "output": "346.4k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"F"}, {"name": "country", "value":"Norway"}],  "output": "308k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"F"}, {"name": "country", "value":"Sweden"}],  "output": "727.6k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"M"}, {"name": "country", "value":"Denmark"}], "output": "386.4k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"M"}, {"name": "country", "value":"Finland"}], "output": "376.4k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"M"}, {"name": "country", "value":"Norway"}],  "output": "349.2k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"M"}, {"name": "country", "value":"Sweden"}],  "output": "800k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"F"}, {"name": "country", "value":"Denmark"}], "output": "258.4k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"F"}, {"name": "country", "value":"Finland"}], "output": "296.4k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"F"}, {"name": "country", "value":"Norway"}],  "output": "256.4k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"F"}, {"name": "country", "value":"Sweden"}],  "output": "472.8k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"M"}, {"name": "country", "value":"Denmark"}], "output": "206.4k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"M"}, {"name": "country", "value":"Finland"}], "output": "223.6k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"M"}, {"name": "country", "value":"Norway"}],  "output": "210.4k"},
-  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"M"}, {"name": "country", "value":"Sweden"}],  "output": "348.8k"}
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"F"}, {"name": "country", "value":"denmark"}], "output": "483k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"F"}, {"name": "country", "value":"finland"}], "output": "691.8k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"F"}, {"name": "country", "value":"norway"}],  "output": "339.6k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"F"}, {"name": "country", "value":"sweden"}],  "output": "530.4k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"M"}, {"name": "country", "value":"denmark"}], "output": "453k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"M"}, {"name": "country", "value":"finland"}], "output": "700.2k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"M"}, {"name": "country", "value":"norway"}],  "output": "329.4k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"M"}, {"name": "country", "value":"sweden"}],  "output": "556.2k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"F"}, {"name": "country", "value":"denmark"}], "output": "510.6k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"F"}, {"name": "country", "value":"finland"}], "output": "519.6k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"F"}, {"name": "country", "value":"norway"}],  "output": "462k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"F"}, {"name": "country", "value":"sweden"}],  "output": "1091.4k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"M"}, {"name": "country", "value":"denmark"}], "output": "579.6k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"M"}, {"name": "country", "value":"finland"}], "output": "564.6k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"M"}, {"name": "country", "value":"norway"}],  "output": "523.8k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"M"}, {"name": "country", "value":"sweden"}],  "output": "1200k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"F"}, {"name": "country", "value":"denmark"}], "output": "387.6k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"F"}, {"name": "country", "value":"finland"}], "output": "444.6k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"F"}, {"name": "country", "value":"norway"}],  "output": "384.6k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"F"}, {"name": "country", "value":"sweden"}],  "output": "709.2k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"M"}, {"name": "country", "value":"denmark"}], "output": "309.6k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"M"}, {"name": "country", "value":"finland"}], "output": "335.4k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"M"}, {"name": "country", "value":"norway"}],  "output": "315.6k"},
+  {"input":[{"name": "age", "value": "< 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"M"}, {"name": "country", "value":"sweden"}],  "output": "523.2k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"F"}, {"name": "country", "value":"denmark"}], "output": "322k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"F"}, {"name": "country", "value":"finland"}], "output": "461.2k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"F"}, {"name": "country", "value":"norway"}],  "output": "226.4k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"F"}, {"name": "country", "value":"sweden"}],  "output": "353.6k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"M"}, {"name": "country", "value":"denmark"}], "output": "302k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"M"}, {"name": "country", "value":"finland"}], "output": "466.8k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"M"}, {"name": "country", "value":"norway"}],  "output": "219.6k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Primary"},   {"name": "sex", "value":"M"}, {"name": "country", "value":"sweden"}],  "output": "370.8k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"F"}, {"name": "country", "value":"denmark"}], "output": "340.4k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"F"}, {"name": "country", "value":"finland"}], "output": "346.4k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"F"}, {"name": "country", "value":"norway"}],  "output": "308k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"F"}, {"name": "country", "value":"sweden"}],  "output": "727.6k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"M"}, {"name": "country", "value":"denmark"}], "output": "386.4k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"M"}, {"name": "country", "value":"finland"}], "output": "376.4k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"M"}, {"name": "country", "value":"norway"}],  "output": "349.2k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Secondary"}, {"name": "sex", "value":"M"}, {"name": "country", "value":"sweden"}],  "output": "800k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"F"}, {"name": "country", "value":"denmark"}], "output": "258.4k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"F"}, {"name": "country", "value":"finland"}], "output": "296.4k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"F"}, {"name": "country", "value":"norway"}],  "output": "256.4k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"F"}, {"name": "country", "value":"sweden"}],  "output": "472.8k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"M"}, {"name": "country", "value":"denmark"}], "output": "206.4k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"M"}, {"name": "country", "value":"finland"}], "output": "223.6k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"M"}, {"name": "country", "value":"norway"}],  "output": "210.4k"},
+  {"input":[{"name": "age", "value": "> 40"}, {"name": "education", "value":"Tertiary"},  {"name": "sex", "value":"M"}, {"name": "country", "value":"sweden"}],  "output": "348.8k"}
 ]
+
+capitalize = (n) -> "#{n[0].toUpperCase()}#{n[1...]}"
 
 $(document).ready -> $('body').append R.div {class: 'container'}, [
   R.br()
@@ -129,7 +131,7 @@ $(document).ready -> $('body').append R.div {class: 'container'}, [
       {name: 'age', values: ['< 40', '> 40']}
     ],
     colArgs: [
-      {name: 'country', values: ['Denmark', 'Finland', 'Norway', 'Sweden']}
+      {name: 'country', values: ['denmark', 'finland', 'norway', 'sweden'], fmtfn: capitalize}
     ],
     cellData: demoData
     cellOptsFn: -> {style: {padding: 5}}
@@ -142,7 +144,7 @@ $(document).ready -> $('body').append R.div {class: 'container'}, [
       {name: 'age', values: ['< 40', '> 40']}
     ],
     colArgs: [
-      {name: 'country', values: ['Denmark', 'Finland', 'Norway', 'Sweden']}
+      {name: 'country', values: ['denmark', 'finland', 'norway', 'sweden'], fmtfn: capitalize}
       {name: 'sex', values: ['M', 'F']}
     ],
     cellOptsFn: -> {style: {padding: 5}}
@@ -154,7 +156,7 @@ $(document).ready -> $('body').append R.div {class: 'container'}, [
       {name: 'education', values: ['Primary', 'Secondary', 'Tertiary']},
     ],
     colArgs: [
-      {name: 'country', values: ['Denmark', 'Finland', 'Norway', 'Sweden']}
+      {name: 'country', values: ['denmark', 'finland', 'norway', 'sweden'], fmtfn: capitalize}
       {name: 'age', values: ['< 40', '> 40']}
     ],
     cellData: demoData
