@@ -266,7 +266,11 @@
                     return [name, value];
                   }));
                   cellVal = argString in indexedCellData ? indexedCellData[argString] : cellFn(argDict);
-                  return R.td(_.extend({}, cellOptsFn(cellVal, argDict)), fmtfn(cellVal, argDict));
+                  return R.td(_.extend({}, cellOptsFn(cellVal, argDict), _.chain(argDict).pairs().map(function(arg1) {
+                    var k, v;
+                    k = arg1[0], v = arg1[1];
+                    return ["hyper-arg-" + k, v];
+                  }).object().value()), fmtfn(cellVal, argDict));
                 });
               })
             ];
