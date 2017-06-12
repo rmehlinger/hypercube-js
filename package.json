@@ -1,6 +1,6 @@
 {
   "name": "hypercube-js",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Javascript library for building and working with multidimensional tables",
   "main": "main.js",
   "scripts": {
