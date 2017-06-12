@@ -55,7 +55,7 @@ window.multiDim = multiDim = ({rowArgs, colArgs, cellFn, cellOptsFn, tableOpts, 
 
   if cellData
     indexedCellData = _.object cellData.map ({input, output}) -> [
-      JSON.stringify(_.pluck _.sortBy(input, 'name'), 'value'), output
+      JSON.stringify(_.chain(input).sortBy('name').pluck('value').map((x) -> if typeof x == 'string' then x else JSON.stringify x).value()), output
     ]
   else
     indexedCellData = {}

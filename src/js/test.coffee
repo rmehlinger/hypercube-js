@@ -166,4 +166,20 @@ $(document).ready -> $('body').append R.div {class: 'container'}, [
     cellOptsFn: -> {style: {padding: 5}}
     tableOpts: {class: 'table table-bordered table-condensed'}
   }
+  R.h1 'what'
+  R.div {class: 'row'}, R.div {class: 'col-md-8'}, multiDim {
+    rowArgs: [
+      {name: 1, values: [1, 1.5]}
+      {name: 2, values: [2.0, 2.25, 2.5, 2.75]},
+    ],
+    colArgs: [
+      {name: 3, values: [3.0, 3.2, 3.4, 3.6, 3.8]}
+      {name: 4, values: [4.0, 4.25, 4.5, 4.75]}
+    ],
+    cellFn: (args) ->
+      x = Math.floor args[1] * args[2] * args[3] * args[4]
+      x
+    cellOptsFn: -> {style: {padding: 5}}
+    tableOpts: {class: 'table table-bordered table-condensed'}
+  }
 ]
